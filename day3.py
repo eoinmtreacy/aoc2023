@@ -4,12 +4,14 @@ lines = f.readlines()
 
 # 140 chars on a line, 140 lines
 
+# 360007 too low
+
 matrix = []
 
 symbols = "$%@/-&+=*#"
 
 for line in lines:
-    matrix.append([line[:-1]])
+    matrix.append(line[:-1])
 
 total = 0
 
@@ -21,32 +23,43 @@ for i in range(len(matrix)):
         number = ""
 
         try:
-
             if matrix[i][j] in "0123456789" and matrix[i][j - 1] not in "0123456789":
                 size = 1
                 counting = True
                 number = number + matrix[i][j]
-                # determine size of the number, will affect adjacent squres inspected
+                # determine size of the number, will affect adjacent squares inspected
                 while counting:
                     if matrix[i][j + size] in "0123456789":
-                        number = number + matrix[i][j]
+                        number = number + matrix[i][j + size]
                         size += 1
                     else:
                         counting = False
-
-                if matrix[i - 1][j - 1] in symbols or matrix[i][j - 1] in symbols:
-                    valid = True
-
-
-                for k in range(0, size + 1):
-                    if matrix[i - 1][j + k] in symbols:
+                try:
+                    if matrix[i - 1][j - 1] in symbols or matrix[i][j - 1] in symbols:
+                        print(matrix[i - 1][j - 1], matrix[i][j - 1])
                         valid = True
-                        break
+                except:
+                    pass
+
+                try:
+                    for k in range(0, size + 1):
+                        print(matrix[i - 1][j + k])
+                        if matrix[i - 1][j + k] in symbols:
+                            valid = True
+                            break
+                except:
+                    pass
                 
-                if matrix[i][j + size] in symbols:
-                    valid = True
+                try:
+                    print(matrix[i][j + size])
+                    if matrix[i][j + size] in symbols:
+                        valid = True
+                except:
+                    pass
+
                 try:
                     for k in range(size + 1, 0, -1):
+                        print(matrix[i + 1][j - k])
                         if matrix[i + 1][j - k] in symbols:
                             valid = True
                             break
