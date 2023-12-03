@@ -5,6 +5,7 @@ lines = f.readlines()
 # 140 chars on a line, 140 lines
 
 # 360007 too low
+# 426397 too low
 
 matrix = []
 
@@ -23,7 +24,7 @@ for i in range(len(matrix)):
         number = ""
 
         try:
-            if matrix[i][j] in "0123456789" and matrix[i][j - 1] not in "0123456789":
+            if matrix[i][j] in "0123456789" and matrix[i][j - 1] not in "0123456789" and j - 1 >= 0:
                 size = 1
                 counting = True
                 number = number + matrix[i][j]
@@ -35,23 +36,23 @@ for i in range(len(matrix)):
                     else:
                         counting = False
                 try:
-                    if matrix[i - 1][j - 1] in symbols or matrix[i][j - 1] in symbols:
-                        print(matrix[i - 1][j - 1], matrix[i][j - 1])
+                    # print(matrix[i - 1][j - 1], matrix[i][j - 1])
+                    if matrix[i - 1][j - 1] in symbols or matrix[i][j - 1] in symbols and i - 1 >= 0 and j -1 >= 0:
                         valid = True
                 except:
                     pass
 
                 try:
                     for k in range(0, size + 1):
-                        print(matrix[i - 1][j + k])
-                        if matrix[i - 1][j + k] in symbols:
+                        # print(matrix[i - 1][j + k])
+                        if matrix[i - 1][j + k] in symbols and i - 1 >= 0:
                             valid = True
                             break
                 except:
                     pass
                 
                 try:
-                    print(matrix[i][j + size])
+                    # print(matrix[i][j + size])
                     if matrix[i][j + size] in symbols:
                         valid = True
                 except:
@@ -59,8 +60,8 @@ for i in range(len(matrix)):
 
                 try:
                     for k in range(size + 1, 0, -1):
-                        print(matrix[i + 1][j - k])
-                        if matrix[i + 1][j - k] in symbols:
+                        # print(matrix[i + 1][j + k])
+                        if matrix[i + 1][j + k] in symbols:
                             valid = True
                             break
                 except:
