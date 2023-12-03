@@ -27,24 +27,29 @@ numbers = {
     "nine": "9"
 }
 
-checking = list(numbers.keys())
+checks = list(numbers.keys())
 
-for l,line in enumerate(lines):
+for line in lines:
     print(line)
-    new = []
-    for check in checking:
-        if check in line:
-            for i, check in enumerate(line):
-                    try:
-                        new.append((numbers[check],i))
-                    except:
-                         pass
-    new.sort(key=lambda x : x[1])
-    addition = new[0][0] + new[-1][0]
-    if l == 999:
-        pass
-    nums.append(addition)
-    print(addition)
+    new = ""
+    
+    for i in range(1,len(line) + 1):
+        for check in checks:
+            if check in line[:i]:
+                new = new + numbers[check]
+                break
+        if len(new) > 0:
+            break
+    for i in range(1,len(line) + 1):
+        for check in checks:
+            if check in line[-i:]:
+                new = new + numbers[check]
+                break
+        if len(new) > 1:
+            break
+
+    nums.append(new)
+    print(new)
 
 sum = 0
 
