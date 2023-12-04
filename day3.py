@@ -10,10 +10,13 @@ lines = f.readlines()
 # 575609 too high
 
 def check_surround(matrix, y, x, length, X):
+
+ 
+    
     symbols = "$%@/-&+=*#"
 
-    for i in range(-1, length, 1):
-        if y - 1 >= 0 and x + i > 0 and x + i < X:
+    for i in range(-1, length + 1, 1):
+        if y - 1 >= 0 and x + i > -1 and x + i < X:
             if matrix[y - 1][x + i] in symbols:
                 return True
     
@@ -27,7 +30,7 @@ def check_surround(matrix, y, x, length, X):
 
     for i in range(length - 1, -2, -1):
         if y + 1 < X and x + i > -1:
-            if matrix[y + 1][x + i]:
+            if matrix[y + 1][x + i] in symbols:
                 return True
     
     return False
@@ -38,31 +41,49 @@ for line in lines:
     matrix.append(line[:-1])
 
 X = len(matrix[0])
-print(X)
 
 total = 0
 
-for i in range(len(matrix)):
-    for j in range(len(matrix)):
+for i in range(X):
+    for j in range(X):
         # iterate through the matrix until it encounters a number with no preceding number
 
         number = ""
 
-        if matrix[i][j] in "0123456789" and  j - 1 >= 0 and matrix[i][j - 1] not in "0123456789":
-            size = 1
-            counting = True
-            number = number + matrix[i][j]
-            # determine size of the number, will affect adjacent squares inspected
-            while counting:
-                if j + size < X and matrix[i][j + size] in "0123456789":
-                    number = number + matrix[i][j + size]
-                    size += 1
-                else:
-                    counting = False
-            print(i,j, number)
+        
+
+        if matrix[i][j] in "0123456789":
+
+            if j - 1 == -1 or matrix[i][j - 1] not in "0123456789":
+                number = number + matrix[i][j]
+                size = 1
+                counting = True
             
+            # determine size of the number, will affect adjacent squares inspected
+                
+            while j + size < X and matrix[i][j + size] in "0123456789":
+                number = number + matrix[i][j + size]
+                size += 1
+                    
+            
+            
+        if i == 5 and j == 0:
             if check_surround(matrix, i, j, len(number), X):
+                try:
+                    total += int(number)
+                    print(i,j, number)
+                except:
+                    pass
+
+        elif check_surround(matrix, i, j, len(number), X):
+            try:
                 total += int(number)
+                print(i,j, number)
+            except:
+                pass
+
+                
+
 
 print(total)
 
