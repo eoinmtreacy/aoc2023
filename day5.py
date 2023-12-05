@@ -14,19 +14,38 @@ def make_maps(name):
     
     # construct 3-dimensional array from each map
     maps = [[numbers.split() for numbers in map] for map in maps]
+    # convert to integers
+    maps = [[[int(number) for number in line] for line in map] for map in maps]
 
-    return maps
+    return maps[0][0], maps[1:]
 
+def map_seed(seeds, map):
+    
+    def return_new_seed(seed, map):
+        # if in any map, return index of destination map else return seed number
+        for line in map:
+            source = list(range(line[1], line[1] + line[2]))
+            dest = list(range(line[0], line[0] + line[2]))
+            if seed in source:
+                # TODO add more efficient in range check
+                seed = dest[source.index(seed)]
+                break
+        return seed
 
-# for each seed in list
+        # for each seed in list
 
-# if in any map, return index of destination map else return seed number
+    return [return_new_seed(seed, map) for seed in seeds]
 
-# if location > closest, closest = location
 
 def main():
     make_maps("code.txt")
-    seeds, seed2soil, soil2fert, fert2wat, wat2light, light2temp, temp2hum, hum2loc = make_maps("code.txt")
+    # seed2soil, soil2fert, fert2wat, wat2light, light2temp, temp2hum, hum2loc
+    seeds, maps = make_maps("code.txt")
+    print(seeds)
+
+    print(map_seed(seeds, maps[0]))
+
+    # if location > closest, closest = location
 
 if __name__ == "__main__":
     main()
