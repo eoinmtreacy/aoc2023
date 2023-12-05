@@ -19,7 +19,7 @@ def make_maps(name):
 
     return maps[0][0], maps[1:]
 
-def map_seed(seeds, map):
+def map_seeds(seeds, map):
     
     def return_new_seed(seed, map):
         # if in any map, return index of destination map else return seed number
@@ -43,8 +43,10 @@ def main():
     seeds, maps = make_maps("code.txt")
     print(seeds)
 
-    print(map_seed(seeds, maps[0]))
+    # for map in maps:
+    #     seeds = map_seeds(seeds, map)
 
+    print(min(seeds))
     # if location > closest, closest = location
 
 if __name__ == "__main__":
