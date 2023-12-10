@@ -19,32 +19,49 @@ def make_maps(name):
 
     return maps[0][0], maps[1:]
 
-def map_seeds(seeds, map):
-    
-    def return_new_seed(seed, map):
-        # if in any map, return index of destination map else return seed number
-        for line in map:
-            dest, source, count = line[0], line[1], line[2]
-            if source <= seed < count + source:
-                step = seed - source
-                seed = dest + step
-                break
-        return seed
+def gen_seed_ranges(seeds):
+    total = 0
+    for i in range(0,len(seeds), 2):
+        total += (seeds[i] + seeds[i + 1]) - seeds[i]
+    print(total)
 
-    return [return_new_seed(seed, map) for seed in seeds]
+    seed_ranges = []
+    for i in range(0,len(seeds), 2):
+        seed_ranges.append([seeds[i], seeds[i] + seeds[i + 1]])
 
+    seed_ranges.sort(key = lambda x : x[0])
+    return seed_ranges, total
+
+def return_new_seed(seed, map):
+    # if in any map, return index of destination map else return seed number
+    for line in map:
+        dest, source, count = line[0], line[1], line[2]
+        if source <= seed < count + source:
+            step = seed - source
+            seed = dest + step
+            break
+    return seed
 
 def main():
     # seed2soil, soil2fert, fert2wat, wat2light, light2temp, temp2hum, hum2loc
     seeds, maps = make_maps("code.txt")
-    print(seeds)
+    seed_ranges, total = gen_seed_ranges(seeds)
 
-    for map in maps:
-        print(seeds)
-        seeds = map_seeds(seeds, map)
+    print (seed_ranges)
+    closest = 0
+    count = 0
 
-    print(seeds)
-    print(min(seeds))
+    for seeds in seed_ranges:   
+        for seed in range(seeds[0], seeds[1]):
+            for map in maps:
+                seed = return_new_seed(seed, map)
+                count += 1
+            if count % 1000000 == 0:
+                    print(count/total)
+            if seed < closest or closest == 0:
+                closest = seed
+
+    print(closest)
 
 if __name__ == "__main__":
     main()
