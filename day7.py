@@ -27,45 +27,65 @@ class Hand:
     
     @property
     def strength(self):
-        items = sorted(list(self.frequency.items()), key = lambda x : x[1])
-        print(items)
+        unique = len(set(self.cards))
 
-        if items[-1][0] == "J" and items[-1][1] != 5:
-            strength = sorted(self.frequency.values())[1] + self.jacks
-            if strength > 5:
-                strength = 5
-            return strength
-        elif items[-1][0] == "J" and items[-1][1] == 5:
-            return 5
-
+        if unique == 1:
+            return 7 # 5 of a kind
+        if "J" in self.cards:
+            if self.jacks == 4:
+                return 7 # 5 of a kind
+            elif self.jacks == 3 and unique == 2:
+                return 7 # 5 of a kind
+            elif self.jacks == 3 and unique == 3:
+                return 6 # 4 of a kind
+            elif self.jacks == 2 and unique == 2:
+                return 7 # 5 of a kind
+            elif self.jacks == 2 and unique == 3:
+                return 6 # 4 of a kind
+            elif self.jacks == 2 and unique == 4:
+                return 4 # 3 of a kind
+            elif self.jacks == 1 and unique == 2:
+                return 7 # 5 of a kind
+            elif self.jacks == 1 and unique == 3:
+                if max(self.frequency.values()) == 3:
+                    return 6 # 4 of a kind
+                else:
+                    return 5 # full house
+            elif self.jacks == 1 and unique == 4:
+                return 4 # 3 of a kind 
+            elif self.jacks == 1 and unique == 5:
+                return 2 # pair
         else:
-            try:
-                strength = sorted(self.frequency.values())[0] + self.jacks
-                return strength
-            except:
-                return 5
+            if unique == 1:
+                return 7
+            elif unique == 2:
+                if max(self.frequency.values()) == 4:
+                    return 6
+                else:
+                    return 5
+            elif unique == 3:
+                if max(self.frequency.values()) == 3:
+                    return 4 # 3 of kind
+                else:
+                    return 3 # 2 pair
+            elif unique == 4:
+                return 2 # 1 pair
+            else:
+                return 1 # high card
 
-    
     def __gt__(self, other):
-        freq1, freq2 = sorted(list(self.frequency.values())), sorted(list(other.frequency.values()))
 
         if self.strength > other.strength:
             return True
         elif self.strength < other.strength:
             return False
-        
-        try:
-            if freq1[-2] > freq2[-2]:
+
+        for c, card in enumerate(self.cards):
+            if self.ranking.index(card) > other.ranking.index(other.cards[c]):
                 return True
-            elif freq1[-2] < freq2[-2]:
+            elif self.ranking.index(card) < other.ranking.index(other.cards[c]):
                 return False
-        except:
-            for c, card in enumerate(self.cards):
-                if self.ranking.index(card) > other.ranking.index(other.cards[c]):
-                    return True
-                elif self.ranking.index(card) < other.ranking.index(other.cards[c]):
-                    return False
-            return False
+        return False
 
 def read_file(name):
     f = open(name)
@@ -74,7 +94,7 @@ def read_file(name):
     return hands
 
 def main():
-    hands = read_file("test.txt")
+    hands = read_file("code.txt")
     hands.sort()
 
     total = 0
@@ -92,3 +112,4 @@ if __name__ == "__main__":
 # 247262832 too low
 
 # 247567454 not right 
+# 247899739 not right 
