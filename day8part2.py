@@ -1,3 +1,5 @@
+from math import lcm
+
 def read_file(name):
     f = open(name)
     lines = f.read()
@@ -32,9 +34,7 @@ class Node:
                     self.step += 1
                     self.start = 1 if self.instr[self.step % len(self.instr)] == "L" else 2
                     self.current = m
-                    print(m)
                     break
-
         return self.count
     
 def gen_nodes(nodes, instr):
@@ -44,22 +44,16 @@ def gen_nodes(nodes, instr):
             a_nodes.append(Node(instr, node, 0, 0))
     return a_nodes
 
-def parralel_traverse(nodes):
-    pass
-    for node in nodes:
-
-
 def main():
-    instr, raw_nodes = read_file("test.txt")
+    instr, raw_nodes = read_file("code.txt")
     map = parse_nodes(raw_nodes)
 
     nodes = gen_nodes(map, instr)
 
-    print(nodes)
+    print([node.traverse_map(map) for node in nodes])
 
-    for node in nodes:
-        print(node.traverse_map(map))
-
-
+    print(lcm(11653,19783, 19241, 16531,12737,14363))
 if __name__ == "__main__":
     main()
+
+# 129,260,005,219 too low 
