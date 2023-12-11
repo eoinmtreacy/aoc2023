@@ -84,6 +84,8 @@ def main():
 if __name__ == "__main__":
     main()
 
+    print("testing")
+
 # 447,745,088,302 too high
 # 447,736,000,000 too high
 # 447,744,640,566 == dists * 999,999
