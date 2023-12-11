@@ -29,15 +29,34 @@ def create_maze(lines):
         maze.append(x_axis)
     return maze
 
+def traverse_maze(start, maze):
+    # save origin
+    origin = (start.x, start.y)
+    # choose first option
+    start.x, start.y = start.find_options(maze)[0].x, start.find_options(maze)[0].y
+    count = 1
+    # count ++
+
+    # while start.x, start.y != origin
+    while (start.x, start.y) != origin:
+        for option in start.find_options(maze):
+            if option.visited == False:
+                start.x, start.y = option.x, option.y
+                count += 1
+                break
+
+    return count
+
 def main():
     lines = read_file("test.txt")
     maze = create_maze(lines)
-    
+
     for m in maze:
         for each in m:
             if each.s == "S":
-                for option in each.find_options(maze):
-                    print(option)
+                start = each
+
+    print(traverse_maze(start, maze))
 
 if __name__ == "__main__":
     main()
