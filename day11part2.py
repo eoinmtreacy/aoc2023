@@ -74,12 +74,12 @@ def main():
     expanded_map = expand(lines)
     expanded_galaxies = create_galaxies(expanded_map)
 
-    for i,g in enumerate(galaxies):
-        new_loc = (((expanded_galaxies[i].loc[0] - g.loc[0]) * 999999) + g.loc[0], ((expanded_galaxies[i].loc[1] - g.loc[1]) * 999999) + g.loc[1])
-        g.loc = new_loc
+    # for i,g in enumerate(galaxies):
+    #     new_loc = (((expanded_galaxies[i].loc[0] - g.loc[0]) * 999999) + g.loc[0], ((expanded_galaxies[i].loc[1] - g.loc[1]) * 999999) + g.loc[1])
+    #     g.loc = new_loc
     
-    print(sum_dists(galaxies))
-    # print(sum_diff(galaxies, expanded_galaxies) * 999999 + sum_dists(galaxies))
+    print(sum_dists(galaxies), sum_dists(expanded_galaxies))
+    print(sum_diff(galaxies, expanded_galaxies) * 999999 + sum_dists(galaxies))
 
 if __name__ == "__main__":
     main()
