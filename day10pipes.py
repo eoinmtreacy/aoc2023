@@ -17,9 +17,12 @@ class Tile:
     def find_options(self, maze):
         options = []
         for tile in [(self.x - 1, self.y - 1), (self.x, self.y - 1), (self.x + 1, self.y - 1), (self.x + 1, self.y), (self.x + 1, self.y + 1), (self.x , self.y + 1), (self.x -1, self.y + 1), (self.x - 1, self.y)]:
-            check = maze[tile[1]][tile[0]]
-            if self.is_connected(check):
-                options.append(check)
+            if tile[1] < len(maze) and tile[0] < len(maze[0]):
+                check = maze[tile[1]][tile[0]]
+                if self.is_connected(check):
+                    options.append(check)
+            else:
+                print("something")
         return options
                 
 
@@ -53,7 +56,7 @@ class North_East(Tile):
 
     @property
     def connected_tiles(self):
-        return ((self.x - 1, self.y), (self.x, self.y + 1))
+        return ((self.x + 1, self.y), (self.x, self.y + 1))
 
 class North_West(Tile):
     def __init__(self, x, y, symbol):
@@ -69,7 +72,7 @@ class South_West(Tile):
     
     @property
     def connected_tiles(self):
-        return ((self.x + 1, self.y), (self.x, self.y - 1))
+        return ((self.x - 1, self.y), (self.x, self.y + 1))
 
 class South_East(Tile):
     def __init__(self, x, y, symbol):
