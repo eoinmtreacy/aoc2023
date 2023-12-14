@@ -10,28 +10,26 @@ def parse_vertical(sands):
         verticals.append(''.join([sand[i] for sand in sands])[::-1])
     return verticals
 
-def count_rows(sands, multiplier=1):
+def count_rows(sands, multiplier=100):
     # check horizontal
+    current = ''
     for s, sand in enumerate(sands):
-        if sand in sands[s+1:]:
+        if sand == current and s > len(sands)/2:
+            if all([sands[s-1-i] == sands[s+i] for i in range(0, len(sands) - s - 1)]):
+                return s * multiplier
+        else:
             current = sand
-            count = 1
-            for each in sands[s+1:]:
-                if each == current:
-                    count += 1
-                    return(multiplier * count + s)
-                else:
-                    count += 1
-                    current = each
-    return 0
-
+    
+    return 0 if multiplier == 1 else count_rows(parse_vertical(sands), 1)
 
 def main():
     sand_maps = read_file("test.txt")
-    total = 0
-    print(count_rows(sand_maps[0]))
+    print(sum([count_rows(sands) for sands in sand_maps]))
 
 if __name__ == "__main__":
     start = time()
     main()
-    # print(time() - start)
+    print(time() - start)
+
+# 34768 too high
+# 22977 too low
