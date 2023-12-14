@@ -10,8 +10,34 @@ def parse_vertical(rocks):
         verticals.append(''.join([rock[i] for rock in rocks])[::-1])
     return verticals
 
+def make_chunks(rock):
+    chunks = []
+    skip = -1
+    for i, each in enumerate(rock):
+        if i >= skip:
+            if each != "#":
+                step = 0
+                contig = ''
+
+                while i + step < len(rock) and rock[i + step] != "#":
+                    contig = contig + rock[i + step]
+                    step += 1
+                chunks.append(contig)
+                skip = i + step
+
+            else:
+                step = 0
+                contig = ''
+
+                while i + step < len(rock) and rock[i + step] == "#":
+                    contig = contig + rock[i + step]
+                    step += 1
+                chunks.append(contig)
+                skip = i + step
+    return chunks
+
 def load(rock):
-    chunks = [r + "#" if "#" not in r else r for r in rock.split("#")]
+    chunks = make_chunks(rock)
     weight = 0
     load = 0
     for chunk in chunks:
@@ -23,7 +49,7 @@ def load(rock):
     return load
 
 def main():
-    raw_rocks = read_file("test.txt")
+    raw_rocks = read_file("code.txt")
     rocks = parse_vertical(raw_rocks)
     print(sum([load(rock) for rock in rocks]))
 
