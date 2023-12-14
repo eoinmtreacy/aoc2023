@@ -14,8 +14,8 @@ def count_rows(sands, multiplier=100):
     # check horizontal
     current = ''
     for s, sand in enumerate(sands):
-        if sand == current and s > len(sands)/2:
-            if all([sands[s-1-i] == sands[s+i] for i in range(0, len(sands) - s - 1)]):
+        if sand == current:
+            if all([sands[s-1-i] == sands[s+i] if s-1-i > 0 and s + i < len(sands) else True for i in range(0, len(sands))]):
                 return s * multiplier
         else:
             current = sand
@@ -32,4 +32,6 @@ if __name__ == "__main__":
     print(time() - start)
 
 # 34768 too high
+# 30593 too high
+# 27191 not right
 # 22977 too low
