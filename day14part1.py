@@ -37,6 +37,7 @@ def make_chunks(rock):
     return chunks
 
 def load(rock):
+
     chunks = make_chunks(rock)
     weight = 0
     load = 0
@@ -48,10 +49,67 @@ def load(rock):
                 load += weight - r
     return load
 
+class Rock:
+    def __init__(self, s, y, x):
+        self.s = s
+        self.y = y
+        self.x = x
+
+    def __repr__(self):
+        return f'{self.s} Y: {self.y}, X: {self.x}'
+    
+    def east_west(self, other):
+        return self.x < other.x
+    
+    def north_south(self, other):
+        return self.x < other.x
+
+class Roller(Rock):
+    def __init__(self, s, y, x, lever):
+        super().__init__(s, y, x)
+        self.lever = lever
+
+    @property
+    def load(self):
+        return self.y * self.lever
+
+class Brick(Rock):
+    def __init__(self, s, y, x):
+        super().__init__(s, y, x)
+
+    def east_west(self, other):
+        return False
+    
+    def north_south(self, other):
+        return False
+
+class Pebble(Rock):
+    def __init__(self, s, y, x):
+        super().__init__(s, y, x) 
+
+def make_objs(raw_rocks):
+    obj_matrix = []
+    for y, rocks in enumerate(raw_rocks):
+        x_ax = []
+        for x, rock in enumerate(rocks):
+            if rock == "O":
+                x_ax.append(Roller(rock, y, x, len(raw_rocks)))
+            elif rock == "#":
+                x_ax.append(Brick(rock, y, x))
+            elif rock == ".":
+                x_ax.append(Pebble(rock, y, x))
+        obj_matrix.append(x_ax)
+
+    return obj_matrix
+
+
 def main():
     raw_rocks = read_file("code.txt")
-    rocks = parse_vertical(raw_rocks)
-    print(sum([load(rock) for rock in rocks]))
+    rocks = make_objs(raw_rocks)
+    for rock in rocks:
+        print()
+        for r in rock:
+            print(r.s, end = "")
 
 if __name__ == "__main__":
     start = time()
