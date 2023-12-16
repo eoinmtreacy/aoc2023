@@ -139,16 +139,42 @@ def traverse_matrix(beams, matrix):
                     # increment beam
                     beam.y += beam.velocity[0]
                     beam.x += beam.velocity[1]
-    print(beams)
-    return matrix
+
+    return sum([sum([1 if tile.visited else 0 for tile in row]) for row in matrix])
+
 
 
 def main():
     matrix = open("code.txt").read().split("\n")
     parsed_matrix = parse_matrix(matrix)
-    traversed_matrix = traverse_matrix([Beam("beam", 0, 0, (0, 1))], parsed_matrix)
 
-    print(sum([sum([1 if tile.visited else 0 for tile in row]) for row in traversed_matrix]))
+    totals = []
+
+    # along the top
+    for x in range(0, len(matrix[0])):
+        parsed_matrix = parse_matrix(matrix)
+        new = traverse_matrix([Beam("beam", 0, x, (1, 0))], parsed_matrix)
+        totals.append(new)
+
+    # along the bottom
+    for x in range(0, len(matrix[0])):
+        parsed_matrix = parse_matrix(matrix)
+        new = traverse_matrix([Beam("beam", 0, x, (-1, 0))], parsed_matrix)
+        totals.append(new)
+
+    # left side
+    for y in range(0, len(matrix)):
+         parsed_matrix = parse_matrix(matrix)
+         new = traverse_matrix([Beam("beam", y, 0, (0, 1))], parsed_matrix)
+         totals.append(new)
+
+    # right side
+    for y in range(0, len(matrix)):
+        parsed_matrix = parse_matrix(matrix)
+        new = traverse_matrix([Beam("beam", y, len(parsed_matrix[0]), (0, -1))], parsed_matrix)
+        totals.append(new)
+
+    print(max(totals))
 
 if __name__ == "__main__":
     start = time()
