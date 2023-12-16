@@ -12,7 +12,7 @@ class Tile:
         return f'{self.name} Y: {self.y}, X: {self.x} {self.visited}'
     
     def add_vector(self, visitor):
-        if (visitor.name, visitor.velocity) not in self.vectors:
+        if (visitor.velocity) not in self.vectors:
             self.vectors.append(visitor.velocity)
             return True
         else:
@@ -28,7 +28,7 @@ class Beam(Tile):
         self.active = True
 
     def __repr__(self):
-        return f'{self.name} Y: {self.y}, X: {self.x} {"Active" if self.active else "Inactive"}'
+        return f'{self.name} {self.y}, {self.x} {"Active" if self.active else "Inactive"}'
 
 class Vert(Tile):
     def __init__(self, name, y, x):
@@ -37,14 +37,18 @@ class Vert(Tile):
     def affect_vector(self, other):
         if other.velocity == (0, 1) or other.velocity == (0, -1):
             return (-1, 0)
+        else:
+            return other.velocity
 
 class Horz(Tile):
     def __init__(self, name, y, x):
         super().__init__(name, y, x)
 
     def affect_vector(self, other):
-        if other.velocity == (1, 0) or other.velocity == (0, 1):
+        if other.velocity == (1, 0) or other.velocity == (-1, 0):
             return (0, -1)
+        else:
+            return other.velocity
 
 class Forw(Tile):
     def __init__(self, name, y, x):
@@ -87,7 +91,7 @@ def parse_matrix(matrix):
             if each == "|":
                 new = Vert(each, y, x)
             elif each == "-":
-                new == Horz(each, y, x)
+                new = Horz(each, y, x)
             elif each == "/":
                 new = Forw(each, y, x)
             elif each == "\\":
@@ -101,13 +105,14 @@ def parse_matrix(matrix):
 def traverse_matrix(beams, matrix):
     while True:
     # if at least some beams are active 
-        if not all([beam.active for beam in beams]):
+        if not any([beam.active for beam in beams]):
             break
         else:
             # for each beam, check current tile
-            for beam in beams:
+            for beam in list(filter(lambda x : x.active, beams)):
+
             # if not visited, tile.visited = True, tile.vectors(visitor)
-                if beam.y < 0 or beam.x < 0 or beam.y > len(matrix) or beam.x > len(matrix[0]):
+                if beam.y < 0 or beam.x < 0 or beam.y >= len(matrix) or beam.x >= len(matrix[0]):
                     beam.active = False
                     break
 
@@ -118,20 +123,23 @@ def traverse_matrix(beams, matrix):
                 else:
                     current.vectors.append(beam.velocity)
                     current.visited = True
-                    # tile.affect_vector(visitor)
-                    beam.velocity = current.affect_vector(beam)
+                    
                     # if tile.name = "|", beams.append(Beam going south)
 
-                    if current.name == "|":
-                        beams.append(Beam("beam", current.y + 1, current.x, (-1, 0)))
+                    if current.name == "|" and (beam.velocity == (0,1) or beam.velocity == (0,-1)):
+                        beams.append(Beam("beam", current.y + 1, current.x, (1, 0)))
+
                     # elif tile.name = "-", beams.append(Beam going west)
-                    elif current.name == "-":
+                    elif current.name == "-" and (beam.velocity == (1,0) or beam.velocity == (-1, 0)):
                         beams.append(Beam("beam", current.y, current.x + 1, (0, 1)))
+
+                    # tile.affect_vector(visitor)
+                    beam.velocity = current.affect_vector(beam)
                     
                     # increment beam
                     beam.y += beam.velocity[0]
                     beam.x += beam.velocity[1]
-
+    print(beams)
     return matrix
 
 
@@ -139,8 +147,12 @@ def main():
     matrix = open("test.txt").read().split("\n")
     parsed_matrix = parse_matrix(matrix)
     traversed_matrix = traverse_matrix([Beam("beam", 0, 0, (0, 1))], parsed_matrix)
-    print(traversed_matrix)
-    print(sum([sum([1 if tile.visited else 0 for tile in row]) for row in traversed_matrix]))
+    for t in traversed_matrix:
+        print()
+        for each in t:
+            print("#" if each.visited else ".", end="")
+
+    # print(sum([sum([1 if tile.visited else 0 for tile in row]) for row in traversed_matrix]))
 
 if __name__ == "__main__":
     start = time()
