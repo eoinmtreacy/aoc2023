@@ -71,13 +71,13 @@ class Back(Tile):
 
     def affect_vector(self, other):
         if other.velocity == (0, 1):
-            return (-1, 0)
-        elif other.velocity == (1, 0):
-            return (0, -1)
-        elif other.velocity == (0, -1):
             return (1, 0)
-        elif other.velocity == (-1, 0):
+        elif other.velocity == (1, 0):
             return (0, 1)
+        elif other.velocity == (0, -1):
+            return (-1, 0)
+        elif other.velocity == (-1, 0):
+            return (0, -1)
 
 class Dot(Tile):
     def __init__(self, name, y, x):
@@ -144,15 +144,11 @@ def traverse_matrix(beams, matrix):
 
 
 def main():
-    matrix = open("test.txt").read().split("\n")
+    matrix = open("code.txt").read().split("\n")
     parsed_matrix = parse_matrix(matrix)
     traversed_matrix = traverse_matrix([Beam("beam", 0, 0, (0, 1))], parsed_matrix)
-    for t in traversed_matrix:
-        print()
-        for each in t:
-            print("#" if each.visited else ".", end="")
 
-    # print(sum([sum([1 if tile.visited else 0 for tile in row]) for row in traversed_matrix]))
+    print(sum([sum([1 if tile.visited else 0 for tile in row]) for row in traversed_matrix]))
 
 if __name__ == "__main__":
     start = time()
