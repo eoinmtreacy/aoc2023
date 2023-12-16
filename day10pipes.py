@@ -6,7 +6,7 @@ class Tile:
         self.visited = False
 
     def is_connected(self, other):
-        return True if (self.x, self.y) in other.connected_tiles else False
+        return True if (other.x, other.y) in self.connected_tiles else False
     
     def __repr__(self):
         return f'{self.s} at {self.x}, {self.y}'
@@ -16,13 +16,11 @@ class Tile:
 
     def find_options(self, maze):
         options = []
-        for tile in [(self.x - 1, self.y - 1), (self.x, self.y - 1), (self.x + 1, self.y - 1), (self.x + 1, self.y), (self.x + 1, self.y + 1), (self.x , self.y + 1), (self.x -1, self.y + 1), (self.x - 1, self.y)]:
+        for tile in [(self.x - 1, self.y), (self.x, self.y - 1), (self.x + 1, self.y), (self.x, self.y + 1)]:
             if tile[1] < len(maze) and tile[0] < len(maze[0]):
                 check = maze[tile[1]][tile[0]]
                 if self.is_connected(check):
                     options.append(check)
-            else:
-                print("something")
         return options
                 
 
@@ -56,7 +54,7 @@ class North_East(Tile):
 
     @property
     def connected_tiles(self):
-        return ((self.x + 1, self.y), (self.x, self.y + 1))
+        return ((self.x + 1, self.y), (self.x, self.y - 1))
 
 class North_West(Tile):
     def __init__(self, x, y, symbol):
@@ -88,4 +86,4 @@ class Start(Tile):
 
     @property
     def connected_tiles(self):
-        return ()
+        return ((self.x - 1, self.y), (self.x, self.y - 1), (self.x + 1, self.y), (self.x, self.y + 1))

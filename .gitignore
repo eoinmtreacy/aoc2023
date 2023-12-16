@@ -1,2 +1,4 @@
 ./code.txt
 ./test.txt
+./__pycache
+./bugs.txt

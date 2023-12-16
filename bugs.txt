@@ -1,0 +1,4 @@
+X tiles being renamed
+X logical loops is goosed
+
+- check affect vectors

@@ -40,12 +40,17 @@ def traverse_maze(start, maze):
     # while start.x, start.y != origin
     while (start.x, start.y) != origin:
         for option in start.find_options(maze):
+            all_visited = True
             if option.visited == False:
+                all_visited = False
                 option.visited = True
                 print(option)
                 start.x, start.y = option.x, option.y
                 count += 1
                 break
+        if all_visited:
+            count += 1
+            break
 
     return count
 
